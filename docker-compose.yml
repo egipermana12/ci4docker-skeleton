@@ -1,0 +1,41 @@
+services:
+  franken:
+    container_name: franken
+    build: .
+    volumes:
+      - ./app:/app
+    ports:
+      - "80:80"
+    tty: true
+    depends_on:
+      - mysql_db
+    networks:
+      - franken_net
+
+  mysql_db:
+    container_name: mysql
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: franken
+    ports:
+      - "3306:3306"
+    networks:
+      - franken_net
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "81:80"
+    environment:
+      PMA_HOST: mysql_db
+      PMA_PORT: 3306
+    depends_on:
+      - mysql_db
+    networks:
+      - franken_net
+
+networks:
+  franken_net:
+    driver: bridge
