@@ -32,28 +32,44 @@ class UsersTables extends Migration
                 'constraint' => '1',
                 'default'    => '0'
             ],
-            'created_at' => [
-                'type'       => 'DATETIME',
-                'null'       => true,
-                'default'    => null
-            ],
             'user_role' => [
                 'type'       => 'ENUM',
                 'constraint' => ['admin', 'user'],
                 'default'    => 'user'
             ],
-            'modul_administrasi' => [
-                'type'       => 'ENUM',
-                'constraint' => ['0', '1', '2'],
-                'default'    => '0',
-                'comment'    => '0=disable, 1=write, 2=read'
+            'remember_token' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '255',
+                'null'       => true,
+                'default'    => null
             ],
-            'modul_master' => [
-                'type'       => 'ENUM',
-                'constraint' => ['0', '1', '2'],
-                'default'    => '0',
-                'comment'    => '0=disable, 1=write, 2=read'
+            'provider' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '50',
+                'null'       => true,
+                'default'    => null
             ],
+            'provider_id' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '255',
+                'null'       => true,
+                'default'    => null
+            ],
+            'created_at' => [
+                'type'       => 'DATETIME',
+                'null'       => true,
+                'default'    => null
+            ],
+            'updated_at' => [
+                'type'       => 'DATETIME',
+                'null'       => true,
+                'default'    => null
+            ],
+            'deleted_at' => [
+                'type'       => 'DATETIME',
+                'null'       => true,
+                'default'    => null
+            ]
         ]);
         $this->forge->addKey('user_id', true);
         $this->forge->addUniqueKey('user_email');
