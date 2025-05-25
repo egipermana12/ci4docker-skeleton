@@ -19,6 +19,10 @@ class Register extends BaseController
     }
     public function index()
     {
+        $has_login = session()->has('user_id');
+        if ($has_login) {
+            return redirect()->to(base_url('dashboard'));
+        }
         $blade = new BladeRenderer();
         $data = [
             'title' => 'Login',

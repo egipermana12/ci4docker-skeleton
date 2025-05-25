@@ -51,9 +51,8 @@
                         <div class="row justify-content-between mb-3">
                             <div class="col-auto">
                                 <div class="form-group form-check">
-                                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                    <label class="form-check-label text-secondary font-sm" name="remember" id="remember"
-                                        for="exampleCheck1">Remember
+                                    <input type="checkbox" class="form-check-input" name="remember" id="remember">
+                                    <label class="form-check-label text-secondary font-sm" for="remember">Remember
                                         Me</label>
                                 </div>
                             </div>

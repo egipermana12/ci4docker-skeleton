@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Libraries\BladeRenderer;
+
 
 class Home extends BaseController
 {
@@ -12,6 +14,7 @@ class Home extends BaseController
 
     public function dashboard(): string
     {
-        return view('welcome_message');
+        $blade = new BladeRenderer();
+        return $blade->render('welcome_page');
     }
 }

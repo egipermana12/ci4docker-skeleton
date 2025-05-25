@@ -17,6 +17,10 @@ class Login extends BaseController
 
     public function index()
     {
+        $has_login = session()->has('user_id');
+        if ($has_login) {
+            return redirect()->to(base_url('dashboard'));
+        }
         $blade = new BladeRenderer();
         $data = [
             'title' => 'Login',
@@ -63,7 +67,7 @@ class Login extends BaseController
                         $token = bin2hex(random_bytes(32));
                         $this->user->where('user_id', $user['user_id'])->set(['remember_token' => hash('sha256', $token)])->update();
                         $cookieRemember = [
-                            'name' => 'remember_me',
+                            'name' => 'remember_token',
                             'value' => $token,
                             'expire' => time() + 60 * 60 * 24 * 30, //30 hari
                             'httponly' => true,
@@ -87,5 +91,15 @@ class Login extends BaseController
                 'message' => 'Invalid request',
             ]);
         }
+    }
+
+    public function logout()
+    {
+        if (session()->has('user_id')) {
+            $this->user->where('user_id', session()->get('user_id'))->set(['remember_token' => null])->update();
+        }
+        session()->destroy();
+        delete_cookie('remember_token');
+        return redirect()->to(base_url('login'));
     }
 }
