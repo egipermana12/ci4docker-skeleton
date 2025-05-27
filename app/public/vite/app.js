@@ -35,3 +35,15 @@ if (showHidePassword) {
     showHidePasswordIcon.classList.add(isPassword ? "fa-eye" : "fa-eye-slash");
   });
 }
+
+function refreshToken(tokenName, tokenValue) {
+  // Update di form
+  $('input[name="' + tokenName + '"]').val(tokenValue);
+
+  // Update header AJAX default
+  $.ajaxSetup({
+    headers: {
+      "X-CSRF-TOKEN": tokenValue,
+    },
+  });
+}

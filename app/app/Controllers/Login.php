@@ -43,6 +43,10 @@ class Login extends BaseController
                 return $this->response->setJSON([
                     'status' => ResponseInterface::HTTP_BAD_REQUEST,
                     'message' => $this->validator->getErrors(),
+                    'csrf' => [
+                        'name' => csrf_token(),
+                        'value' => csrf_hash(),
+                    ]
                 ]);
             } else {
                 $data = [
@@ -83,6 +87,10 @@ class Login extends BaseController
                 return $this->response->setJSON([
                     'status' => ResponseInterface::HTTP_BAD_REQUEST,
                     'message' => 'Email atau password salah',
+                    'csrf' => [
+                        'name' => csrf_token(),
+                        'value' => csrf_hash(),
+                    ]
                 ]);
             }
         } else {
