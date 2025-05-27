@@ -119,6 +119,11 @@
     {{-- ajax --}}
     <script>
         $(document).ready(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('input[name="csrf_token_name"]').val()
+                }
+            });
             $('#loginForm').submit(function (e) {
                 e.preventDefault(); 
 
@@ -134,6 +139,12 @@
                         $btn.html('<i class="fa fa-spin fa-spinner"></i> Processing...');
                     },
                     success: function (response) {
+                        
+                        //refresh csrf token
+                        if(response.csrf){
+                            refreshToken(response.csrf.name, response.csrf.value);
+                        }
+
                         if (response.status == 400) {
                             // Tampilkan pesan error
                             if (response.message === 'Email atau password salah') {

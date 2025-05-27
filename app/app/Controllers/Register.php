@@ -44,6 +44,10 @@ class Register extends BaseController
                 return $this->response->setJSON([
                     'status' => ResponseInterface::HTTP_BAD_REQUEST,
                     'message' => $this->validator->getErrors(),
+                    'csrf' => [
+                        'name' => csrf_token(),
+                        'value' => csrf_hash(),
+                    ]
                 ]);
             } else {
                 $email = $this->request->getVar('user_email');
@@ -74,12 +78,20 @@ class Register extends BaseController
                         return $this->response->setJSON([
                             'status' => ResponseInterface::HTTP_BAD_REQUEST,
                             'message' => 'Emai gagal dikirimi, silahkan coba lagi',
+                            'csrf' => [
+                                'name' => csrf_token(),
+                                'value' => csrf_hash(),
+                            ]
                         ]);
                     }
                 } else {
                     return $this->response->setJSON([
                         'status' => ResponseInterface::HTTP_BAD_REQUEST,
                         'message' => 'Akun gagal dibuat',
+                        'csrf' => [
+                            'name' => csrf_token(),
+                            'value' => csrf_hash(),
+                        ]
                     ]);
                 }
             }
@@ -87,6 +99,10 @@ class Register extends BaseController
             return $this->response->setJSON([
                 'status' => ResponseInterface::HTTP_BAD_REQUEST,
                 'message' => 'Invalid request',
+                'csrf' => [
+                    'name' => csrf_token(),
+                    'value' => csrf_hash(),
+                ]
             ]);
         }
     }

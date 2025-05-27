@@ -46,7 +46,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item me-3">
-                        <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+                        <a class="nav-link active" aria-current="page" href="<?= base_url('dashboard') ?>">Dashboard</a>
                     </li>
                     <li class="nav-item me-3">
                         <a class="nav-link" href="#">Account</a>

@@ -126,14 +126,12 @@ class AuthSosmed extends BaseController
                     'provider_id' => $userGoogle->getId(),
                 ]);
                 $user = $userModel->where('user_email', $email)->first();
-
-                //set session
-                session()->set('user_id', $user['user_id']);
-
-                return redirect()->to('/dashboard');
-            } else {
-                return redirect()->to('/login')->with('error', 'email sudah terdaftar dengan provider lain');
             }
+
+            //set session
+            session()->set('user_id', $user['user_id']);
+
+            return redirect()->to('/dashboard');
         } catch (\Exception $e) {
             return redirect()->to('/login')->with('error', 'Login dengan Google gagal: ' . $e->getMessage());
         }
