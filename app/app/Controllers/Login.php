@@ -21,6 +21,7 @@ class Login extends BaseController
         if ($has_login) {
             return redirect()->to(base_url('dashboard'));
         }
+
         $blade = new BladeRenderer();
         $data = [
             'title' => 'Login',
