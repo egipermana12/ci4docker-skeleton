@@ -130,7 +130,7 @@ class Register extends BaseController
 
     public function activate($token)
     {
-        $userToken = $this->userToken->where('token', $token)->where('type', 'activation')->first();
+        $userToken = $this->userToken->where('token', $token)->where('type', 'verify')->first();
 
         if ($userToken) {
             $this->user->where('user_email', $userToken['email'])->set(['is_active' => 1])->update();
