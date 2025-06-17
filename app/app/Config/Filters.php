@@ -37,6 +37,7 @@ class Filters extends BaseFilters
         'performance'   => PerformanceMetrics::class,
         'hasLogin'      => \App\Filters\AuthMiddleware::class,
         'rememberme'    => \App\Filters\RememberMeMiddleware::class,
+        'tenants'       => \App\Filters\TenantsFilter::class,
     ];
 
     /**

@@ -7,7 +7,8 @@
     <!-- FontAwesome JS-->
     <link rel="stylesheet" href="<?= base_url("assets/fontawesome/css/all.min.css"); ?>">
 
-    <script src=<?= base_url("assets/jquery/jquery.min.js"); ?>>
+    <script src=<?=base_url("assets/jquery/jquery.min.js"); ?>
+        >
     </script>
     <style>
         body {
@@ -22,6 +23,8 @@
 </head>
 
 <body>
+    <p>{{$data['title']}}</p>
+    <p>tenants : {{$activeTenant}}</p>
 
     <script src="/vite/app.js"></script>
 </body>

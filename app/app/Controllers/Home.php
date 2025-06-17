@@ -19,7 +19,15 @@ class Home extends BaseController
 
     public function index(): string
     {
-        return view('dashboard/index');
+        $blade = new BladeRenderer();
+
+        $activeTenant = session()->get('activeTenantSubDomain');
+        if ($activeTenant) {
+            return $blade->render('tenantspage/index');
+        }
+
+
+        return $blade->render('index');
     }
 
     public function dashboard(): string

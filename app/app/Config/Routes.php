@@ -5,7 +5,8 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
+$routes->get('/', 'Home::index', ['filter' => 'tenants']);
+
 
 $routes->get('login', 'Login::index');
 $routes->post('login', 'Login::login');
