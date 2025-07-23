@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
     <!-- FontAwesome JS-->
     <link rel="stylesheet" href="<?= base_url("assets/fontawesome/css/all.min.css"); ?>">
-
+    </script>
     <script src=<?=base_url("assets/jquery/jquery.min.js"); ?>
         >
     </script>
@@ -25,25 +25,23 @@
 <body>
     <div class="container">
         <div class="row d-flex justify-content-center mt-5">
-            <div>
-                <?php if (session()->getFlashdata('error')) : ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <?= session()->getFlashdata('error'); ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <?php endif; ?>
-            </div>
+            <div id="forAlert"></div>
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                 <div class="card py-3 px-4">
-                    <h3 class="text-left mb-2 mt-4 fw-medium">Welcome Back</h3>
+                    <h3 class="text-left mb-2 mt-4 fw-medium">Hey, Welcome</h3>
                     <p class="mb-4 text-secondary font-xs">Buat website travel anda sendiri <br> Sign in dan mulai lebih
                         dekat dengan pelanggan</p>
-                    <form class="mt-2" id="loginForm">
+                    <form class="mt-2" id="registerForm">
                         <?= csrf_field(); ?>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-envelope"></i></span>
                             <input type="text" class="form-control" name="user_email" id="user_email"
-                                placeholder="Email@your.com" aria-label="UserEmail" aria-describedby="basic-addon1">
+                                placeholder="Email@yours.com" aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-user"></i></span>
+                            <input type="text" class="form-control" name="user_name" id="user_name"
+                                placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
                         </div>
                         <div class="input-group mb-3" id="show_hide_pass">
                             <span class="input-group-text" id="to">
@@ -55,24 +53,17 @@
                                 <i class="fa-solid fa-eye-slash"></i>
                             </span>
                         </div>
-                        <div class="row justify-content-between mb-3">
-                            <div class="col-auto">
-                                <div class="form-group form-check">
-                                    <input type="checkbox" class="form-check-input" name="remember" id="remember">
-                                    <label class="form-check-label text-secondary font-sm" for="remember">Remember
-                                        Me</label>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <a href="#" class="link-primary text-decoration-none text-end font-sm">Forgot
-                                    password?</a>
-                            </div>
+                        <div class="input-group mb-3" id="show_hide_pass_repeat">
+                            <span class="input-group-text" id="ti"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" class="form-control" name="confirm_password" id="confirm_password"
+                                placeholder="Repeat Password" aria-label="Password" aria-describedby="basic-addon1">
+                            <span class="input-group-text eyeshow" id="basic-addon2"><i
+                                    class="fa-solid fa-eye-slash"></i></span>
                         </div>
                         <div class="d-grid gap-2 mb-4">
-                            <button class="btn btn-primary" type="submit">Login</button>
+                            <button class="btn btn-primary" type="submit">Register</button>
                         </div>
                     </form>
-
                     <p class="text-secondary font-sm fw-semibold text-center">Or</p>
                     <div class="d-grid gap-2">
                         <a href="<?= base_url('auth/facebook') ?>" class="btn btn-light">
@@ -106,14 +97,15 @@
                             &nbsp;&nbsp; <span class="text-secondary font-sm fw-light">Continue with Google</span>
                         </a>
                     </div>
-                    <p class="text-secondary font-xs text-center mt-4">Don't have account? <a
-                            href="<?= base_url('register') ?>"
-                            class="fw-medium link-secondary fw-bold text-decoration-none ">Sign Up Now!</a></p>
+                    <p class="text-secondary font-xs text-center mt-2">Already have account? <a
+                            href="<?= base_url('login') ?>"
+                            class="fw-medium link-secondary fw-bold text-decoration-none ">Sign In</a></p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Theme JS -->
     <script src="/vite/app.js"></script>
 
     {{-- ajax --}}
@@ -124,73 +116,65 @@
                     'X-CSRF-TOKEN': $('input[name="csrf_token_name"]').val()
                 }
             });
-            $('#loginForm').submit(function (e) {
-                e.preventDefault(); 
 
-                const $btn = $('#loginForm').find('button[type="submit"]');
-
+            $('#registerForm').submit(function (e) {
+                e.preventDefault();
                 $.ajax({
                     type: "post",
-                    url: "{{ base_url('login') }}",
+                    url: "{{ base_url('register') }}",
                     data: $(this).serialize(),
                     dataType: "json",
                     beforeSend: function () {
-                        $btn.attr('disabled', true);
-                        $btn.html('<i class="fa fa-spin fa-spinner"></i> Processing...');
+                        $('#registerForm').find('button[type="submit"]').attr('disabled',
+                            true);
+                        $('#registerForm').find('button[type="submit"]').html(
+                            '<i class="fa fa-spin fa-spinner"></i> Processing...');
+                    },
+                    complete: function () {
+                        $('#registerForm').find('button[type="submit"]').attr('disabled',
+                            false);
+                        $('#registerForm').find('button[type="submit"]').html(
+                            'Register');
                     },
                     success: function (response) {
-                        
+
+                        console.log(response.status);
                         //refresh csrf token
                         if(response.csrf){
                             refreshToken(response.csrf.name, response.csrf.value);
                         }
 
-                        if (response.status == 400) {
-                            // Tampilkan pesan error
-                            if (response.message === 'Email atau password salah') {
-                                alert(response.message);
-                            } else {
-                                let errors = response.message;
-                                const inputs = $('.form-control');
+                        // jika validasi gagal, tampilkan pesa
+                        if(response.status == 400){
+                            let errors = response.message;
+                            const inputs = $('.form-control'); // atau ganti selector sesuai kebutuhan
 
-                                inputs.removeClass('is-invalid');
-                                $('.invalid-feedback').remove();
+                            // Bersihkan semua error yang lama
+                            inputs.removeClass('is-invalid');
+                            $('.invalid-feedback').remove();
+                            for (const error in errors) {
+                                const input = $('#' + `${error}`);
+                                input.removeClass('is-invalid');
 
-                                for (const error in errors) {
-                                    const input = $('#' + `${error}`);
-                                    input.removeClass('is-invalid');
-                                    $('.invalid-feedback[data-error="' + error + '"]').remove();
+                                // Hapus feedback sebelumnya yang spesifik
+                                $('.invalid-feedback[data-error="' + error + '"]').remove();
 
-                                    input.addClass('is-invalid');
-                                    input.closest('.input-group').before(
-                                        '<div class="invalid-feedback d-block font-xs" data-error="' + error + '">' + errors[error] + '</div>'
-                                    );
-                                }
+                                input.addClass('is-invalid');
+                                input.closest('.input-group').before(
+                                    '<div class="invalid-feedback d-block font-xs" data-error="' + error + '">' + errors[error] + '</div>'
+                                );
                             }
-
-                            // Aktifkan tombol kembali karena gagal login
-                            $btn.attr('disabled', false);
-                            $btn.html('Login');
-                        } else {
-                            // Sukses login
-                            $('#loginForm')[0].reset();
-                            $btn.attr('disabled', true);
-                            $btn.html('<i class="fa fa-spin fa-spinner"></i> Redirecting...');
-
-                            // Redirect dengan delay agar render tombol
-                            setTimeout(function () {
-                                window.location.href = response.redirect;
-                            }, 300);
+                        }else{
+                            $('#registerForm')[0].reset();
+                            $('#registerForm').find('button[type="submit"]').attr('disabled',
+                                true);
+                            let alertWrapper = $('#forAlert');
+                            alertWrapper.html('<div class="alert alert-primary" role="alert">Akun berhasil dibuat, silahkan cek email untuk aktivasi akun.</div>');
                         }
-                    },
-                    error: function () {
-                        alert("Terjadi kesalahan jaringan atau server.");
-                        $btn.attr('disabled', false);
-                        $btn.html('Login');
                     }
-                });
-            });
-        });
+                })
+            })
+        })
     </script>
 </body>
 

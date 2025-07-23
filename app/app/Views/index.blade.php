@@ -23,8 +23,7 @@
 </head>
 
 <body>
-    <p>{{$data['title']}}</p>
-    <p>tenants : {{$activeTenant}}</p>
+    <p>tenants</p>
 
     <script src="/vite/app.js"></script>
 </body>

@@ -17,7 +17,7 @@
                 <li class="nav-item me-3 dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        Page
+                        Master
                     </a>
                     <ul class="dropdown-menu dropdown-menu-custom">
                         <li><a class="dropdown-item" href="#">About</a></li>

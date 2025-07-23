@@ -6,6 +6,7 @@
 :root,
 [data-bs-theme="light"] {
   --bs-blue: #0d6efd;
+  --bs-blue-dark: #16315a;
   --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
   --bs-pink: #d63384;
@@ -12210,8 +12211,15 @@ a.text-link:hover {
 
 .nav-link {
   border-radius: 5px !important;
+  font-size: 14px !important;
+  color: #fff;
 }
 
 .nav-link.active {
   background-color: var(--bs-gray-300) !important;
+}
+
+.bg-blue-dark {
+  --bs-bg-opacity: 1;
+  background-color: var(--bs-blue-dark) !important;
 }

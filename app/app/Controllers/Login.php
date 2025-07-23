@@ -5,20 +5,25 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Libraries\BladeRenderer;
-use App\Models\User;
+use App\Services\AuthServices;
+use App\Validation\ValidasiAuth;
 
 class Login extends BaseController
 {
-    protected $user;
+    protected $authServices;
+    protected $validasiAuth;
+
     public function __construct()
     {
-        $this->user = new User();
+        $this->authServices = new AuthServices();
+        $this->validasiAuth = new ValidasiAuth();
     }
 
     public function index()
     {
         $has_login = session()->has('user_id');
-        if ($has_login) {
+        if ($has_login)
+        {
             return redirect()->to(base_url('dashboard'));
         }
 
@@ -27,7 +32,7 @@ class Login extends BaseController
             'title' => 'Login',
             'message' => 'Welcome to CodeIgniter 4!',
         ];
-        return $blade->render('login/login', $data);
+        return $blade->render('Authentication/login', $data);
     }
 
     /**
@@ -35,80 +40,52 @@ class Login extends BaseController
      * * */
     public function login()
     {
-        if ($this->request->isAJAX()) {
-            $rules = [
-                'user_email' => 'required|valid_email',
-                'password' => 'required',
-            ];
-            if (!$this->validate($rules)) {
-                return $this->response->setJSON([
-                    'status' => ResponseInterface::HTTP_BAD_REQUEST,
-                    'message' => $this->validator->getErrors(),
-                    'csrf' => [
-                        'name' => csrf_token(),
-                        'value' => csrf_hash(),
-                    ]
-                ]);
-            } else {
-                $data = [
-                    'user_email' => $this->request->getPost('user_email'),
-                    'password' => $this->request->getPost('password'),
-                    'remember' => $this->request->getPost('remember'),
-                ];
-                $user = $this->user->where('user_email', $data['user_email'])->first();
-                if ($user && password_verify($data['password'], $user['password'])) {
-                    //cek apakah akun sudah diaktifkan
-                    if ($user['is_active'] != 1) {
-                        return $this->response->setJSON([
-                            'status' => ResponseInterface::HTTP_BAD_REQUEST,
-                            'message' => 'Akun belum diaktifkan',
-                        ]);
-                    }
-                    //set session
-                    session()->set('user_id', $user['user_id']);
-
-                    //cek apakah user memilih remember me
-                    if ($data['remember']) {
-                        $token = bin2hex(random_bytes(32));
-                        $this->user->where('user_id', $user['user_id'])->set(['remember_token' => hash('sha256', $token)])->update();
-                        $cookieRemember = [
-                            'name' => 'remember_token',
-                            'value' => $token,
-                            'expire' => time() + 60 * 60 * 24 * 30, //30 hari
-                            'httponly' => true,
-                        ];
-                        set_cookie($cookieRemember);
-                    }
-                    return $this->response->setJSON([
-                        'status' => ResponseInterface::HTTP_OK,
-                        'message' => 'Login berhasil',
-                        'redirect' => base_url('dashboard'),
-                    ]);
-                }
-                return $this->response->setJSON([
-                    'status' => ResponseInterface::HTTP_BAD_REQUEST,
-                    'message' => 'Email atau password salah',
-                    'csrf' => [
-                        'name' => csrf_token(),
-                        'value' => csrf_hash(),
-                    ]
-                ]);
-            }
-        } else {
+        //return if not ajax request
+        if (!$this->request->isAJAX())
+        {
             return $this->response->setJSON([
                 'status' => ResponseInterface::HTTP_BAD_REQUEST,
                 'message' => 'Invalid request',
             ]);
         }
+
+        //handle validasi login
+        $validator_login = $this->validasiAuth->loginValidation();
+
+        if(!$this->validate($validator_login))
+        {
+            return $this->response->setJSON([
+                'status' => ResponseInterface::HTTP_BAD_REQUEST,
+                'message' => $this->validator->getErrors(),
+                'redirect' => null,
+                'csrf' => [
+                    'name' => csrf_token(),
+                    'value' => csrf_hash(),
+                ]
+            ]);
+        }
+
+        //credetials
+        $credentials = $this->request->getPost(['user_email', 'password', 'remember']);
+        $result = $this->authServices->login($credentials);
+
+        //return response
+        return $this->response->setJSON([
+            'status' => $result['status'] ? ResponseInterface::HTTP_OK : ResponseInterface::HTTP_BAD_REQUEST,
+            'message' => $result['message'],
+            'redirect' => $result['status'] ? $result['redirect'] : null,
+            'csrf' => [
+                'name' => csrf_token(),
+                'value' => csrf_hash(),
+            ]
+        ]);
     }
 
     public function logout()
     {
-        if (session()->has('user_id')) {
-            $this->user->where('user_id', session()->get('user_id'))->set(['remember_token' => null])->update();
+        $logout = $this->authServices->logout();
+        if($logout) {
+            return redirect()->to(base_url('login'));
         }
-        session()->destroy();
-        delete_cookie('remember_token');
-        return redirect()->to(base_url('login'));
     }
 }

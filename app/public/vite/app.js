@@ -47,3 +47,14 @@ function refreshToken(tokenName, tokenValue) {
     },
   });
 }
+
+
+loadingSmall = function ()
+{
+  $('#loadingSmall').html('<div class="spinner-border text-danger spinner-grow-sm" role="status"><span class="sr-only">Loading...</span></div>');
+}
+
+clearLoadingSmall = function ()
+{
+  $('#loadingSmall').html('');
+}

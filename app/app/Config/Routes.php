@@ -26,11 +26,14 @@ $routes->get('auth/google/callback', 'AuthSosmed::googleCallback');
 
 
 $routes->group('dashboard', ['filter' => ['hasLogin', 'rememberme']], function ($routes) {
-    $routes->get('/', 'Home::dashboard');
+    $routes->get('/', 'DashboardController::index');
 });
 
+// dashboard tenants
 $routes->group('tenants', ['filter' => ['hasLogin', 'rememberme']], function ($routes) {
     $routes->get('/', 'TenantsController::index');
     $routes->get('fetch', 'TenantsController::fetchData');
     $routes->post('/', 'TenantsController::create');
 });
+
+$routes->post('tujuan_tenant', 'TenantDepartureController::findTujuan');

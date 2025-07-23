@@ -5,16 +5,21 @@ namespace App\Controllers;
 use App\Libraries\BladeRenderer;
 use App\Models\User;
 use App\Models\Tenants;
+use App\Models\TenantDeparture;
+
+
 
 class Home extends BaseController
 {
     protected $user;
     protected $tenants;
+    protected $tenantsDeparture;
 
     public function __construct()
     {
         $this->user = new User();
         $this->tenants = new Tenants();
+        $this->tenantsDeparture = new TenantDeparture();
     }
 
     public function index(): string
@@ -22,23 +27,13 @@ class Home extends BaseController
         $blade = new BladeRenderer();
 
         $activeTenant = session()->get('activeTenantSubDomain');
+
         if ($activeTenant) {
-            return $blade->render('tenantspage/index');
-        }
+            $departure = $this->tenantsDeparture->getCityAndDeparture();
+            return $blade->render('tenantspage/index', ['departure' => $departure]);
 
-
-        return $blade->render('index');
-    }
-
-    public function dashboard(): string
-    {
-        $findTenant = $this->tenants->where('user_id', session()->get('user_id'))->first();
-
-        $blade = new BladeRenderer();
-        if ($findTenant) {
-            return $blade->render('dashboard/tenant_not_null', ['tenant' => $findTenant]);
-        } else {
-            return $blade->render('dashboard/tenant_null', ['tenant' => null]);
+        }else{
+            return $blade->render('index');
         }
     }
 }

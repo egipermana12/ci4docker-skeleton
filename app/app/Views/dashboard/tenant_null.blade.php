@@ -90,7 +90,7 @@
                         refreshToken(response.csrf.name, response.csrf.value);
                     }
                     if (response.status == 400) {
-                        let errors = response.errors;
+                        let errors = response.message;
                         
                         const inputs = $('.form-control');
                         inputs.removeClass('is-invalid');

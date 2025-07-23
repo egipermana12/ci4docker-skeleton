@@ -33,6 +33,7 @@
 
     <!-- Saat production, load versi yang sudah dibuild -->
     <link rel="stylesheet" href="/vite/style.css">
+    <link rel="stylesheet" href="/vite/mycss.css">
 
 </head>
 

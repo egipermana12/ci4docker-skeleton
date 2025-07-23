@@ -35,6 +35,16 @@ class TenantsTable extends Migration
                 'constraint' => '100',
                 'comment'    => 'subdomain',
             ],
+            'tenant_status' => [
+                'type'       => 'ENUM',
+                'constraint' => ['aktif', 'pending', 'suspend'],
+                'default'    => 'aktif'
+            ],
+            'tenant_payment' => [
+                'type'       => 'ENUM',
+                'constraint' => ['lunas', 'pending', 'suspend'],
+                'default'    => 'lunas'
+            ],
             'tenant_address' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '100',

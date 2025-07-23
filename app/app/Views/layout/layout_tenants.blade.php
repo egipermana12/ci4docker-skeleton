@@ -5,7 +5,7 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
     <!-- FontAwesome JS-->
-    <link rel="stylesheet" href="<?= base_url("assets/fontawesome/css/all.min.css"); ?>">
+    <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
 
     <script src=<?=base_url("assets/jquery/jquery.min.js"); ?>
         >
@@ -29,6 +29,25 @@
     </script>
     <link rel="stylesheet" href="<?= base_url("assets/datatables/datatables.min.css"); ?>">
 
+    {{-- pikaday --}}
+    <script src=<?=base_url("assets/pikaday/pikaday.js"); ?>
+        >
+    </script>
+    <link rel="stylesheet" href="<?= base_url("assets/pikaday/pikaday.css"); ?>">
+
+    {{-- momentjs --}}
+    <script src=<?=base_url("assets/moment/moment.js"); ?>
+        >
+    </script>
+    <script src=<?=base_url("assets/moment/moment-local-id.js"); ?>
+        >
+    </script>
+
+    <script>
+        moment.locale('id');
+    </script>
+
+
     <style>
         body {
             padding-top: 0 !important;
@@ -39,10 +58,12 @@
 
     <!-- Saat production, load versi yang sudah dibuild -->
     <link rel="stylesheet" href="/vite/style.css">
+    <link rel="stylesheet" href="/vite/mycss.css">
+    <script src="/vite/app.js"></script>
 
 </head>
 
-<body class="bg-gray-600">
+<body class="bg-white">
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light container-hight-two">
         <div class="container-fluid ">
             <a class="navbar-brand text-black" href="#">Navbar</a>
@@ -80,7 +101,7 @@
     <script src=<?=base_url("assets/plugins/bootstrap/js/bootstrap.min.js"); ?>
         >
     </script>
-    <script src="/vite/app.js"></script>
+
 </body>
 
 </html>
