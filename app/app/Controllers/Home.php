@@ -3,18 +3,37 @@
 namespace App\Controllers;
 
 use App\Libraries\BladeRenderer;
+use App\Models\User;
+use App\Models\Tenants;
+use App\Models\TenantDeparture;
+
 
 
 class Home extends BaseController
 {
-    public function index(): string
+    protected $user;
+    protected $tenants;
+    protected $tenantsDeparture;
+
+    public function __construct()
     {
-        return view('dashboard/index');
+        $this->user = new User();
+        $this->tenants = new Tenants();
+        $this->tenantsDeparture = new TenantDeparture();
     }
 
-    public function dashboard(): string
+    public function index(): string
     {
         $blade = new BladeRenderer();
-        return $blade->render('welcome_page');
+
+        $activeTenant = session()->get('activeTenantSubDomain');
+
+        if ($activeTenant) {
+            $departure = $this->tenantsDeparture->getCityAndDeparture();
+            return $blade->render('tenantspage/index', ['departure' => $departure]);
+
+        }else{
+            return $blade->render('index');
+        }
     }
 }

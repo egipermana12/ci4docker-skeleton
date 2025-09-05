@@ -4,20 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class UserToken extends Model
+class TenantCity extends Model
 {
-    protected $table            = 'users_token';
-    protected $primaryKey       = 'id';
+    protected $table            = 'tenants_city';
+    protected $primaryKey       = 'city_id ';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [
-        'email',
-        'token',
-        'created_at',
-        'type'
-    ];
+    protected $allowedFields    = [];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

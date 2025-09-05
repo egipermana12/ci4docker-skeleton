@@ -4,19 +4,24 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class UserToken extends Model
+class Tenants extends Model
 {
-    protected $table            = 'users_token';
-    protected $primaryKey       = 'id';
+    protected $table            = 'tenants';
+    protected $primaryKey       = 'tenant_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'email',
-        'token',
+        'user_id',
+        'tenant_name',
+        'tenant_email',
+        'subdomain',
+        'tenant_logo',
+        'tenant_address',
+        'tenant_phone',
         'created_at',
-        'type'
+        'updated_at'
     ];
 
     protected bool $allowEmptyInserts = false;

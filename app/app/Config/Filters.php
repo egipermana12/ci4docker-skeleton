@@ -37,6 +37,8 @@ class Filters extends BaseFilters
         'performance'   => PerformanceMetrics::class,
         'hasLogin'      => \App\Filters\AuthMiddleware::class,
         'rememberme'    => \App\Filters\RememberMeMiddleware::class,
+        'tenants'       => \App\Filters\TenantsFilter::class,
+        'options'       => \App\Filters\Options::class,
     ];
 
     /**
@@ -75,6 +77,8 @@ class Filters extends BaseFilters
             // 'honeypot',
             'csrf',
             // 'invalidchars',
+            // 'cors',
+            'options'
         ],
         'after' => [
             // 'honeypot',

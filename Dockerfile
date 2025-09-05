@@ -4,7 +4,7 @@ FROM dunglas/frankenphp
 RUN install-php-extensions \
     pdo_mysql \
     mysqlnd \
-	mysqli  \
+    mysqli  \
     gd \
     intl \
     zip \
@@ -23,4 +23,3 @@ ENV SERVER_NAME=":80"
 
 # Expose port jika perlu (opsional, FrankenPHP sudah handle)
 EXPOSE 80
-
